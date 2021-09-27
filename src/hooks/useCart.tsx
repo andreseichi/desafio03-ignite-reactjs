@@ -81,33 +81,16 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     try {
       const cartUpdated = [...cart];
 
-      const foundProductInCart = cartUpdated.find(
+      const indexProductCart = cartUpdated.findIndex(
         (product) => product.id === productId
       );
 
-      if (foundProductInCart) {
-        const index = cartUpdated.indexOf(foundProductInCart);
-        if (index >= 0) {
-          cartUpdated.splice(index, 1);
-          setCart(cartUpdated);
-          localStorage.setItem(
-            '@RocketShoes:cart',
-            JSON.stringify(cartUpdated)
-          );
-        } else {
-          throw Error();
-        }
-      }
-
-      const currentAmountProduct = foundProductInCart
-        ? foundProductInCart.amount
-        : 0;
-
-      const amountProduct = currentAmountProduct - 1;
-
-      if (amountProduct <= 0) {
-        toast.error('Erro na remoção do produto');
-        return;
+      if (indexProductCart >= 0) {
+        cartUpdated.splice(indexProductCart, 1);
+        setCart(cartUpdated);
+        localStorage.setItem('@RocketShoes:cart', JSON.stringify(cartUpdated));
+      } else {
+        throw Error();
       }
     } catch {
       toast.error('Erro na remoção do produto');
